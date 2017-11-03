@@ -59,7 +59,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>kview_9699.ico</ApplicationIcon>
@@ -76,9 +76,10 @@
   <ItemGroup>
     <Compile Include="FindFotoUrl.Properties\Resources.cs" />
     <Compile Include="FindFotoUrl.Properties\Settings.cs" />
-    <Compile Include="FindFotoUrl\Autch.cs">
+    <Compile Include="FindFotoUrl\AuthForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FindFotoUrl\AuthForm.Designer.cs" />
     <Compile Include="FindFotoUrl\FindUrl.cs">
       <SubType>Form</SubType>
     </Compile>

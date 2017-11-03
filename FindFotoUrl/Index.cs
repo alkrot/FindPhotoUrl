@@ -85,7 +85,7 @@ namespace FindFotoUrl
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-			Autch autch = new Autch();
+			AuthForm autch = new AuthForm();
 			autch.ShowDialog();
             _label4.Text = User.Default.Id.ToString();
             Vkapi.Get("stats.trackVisitor", "");
