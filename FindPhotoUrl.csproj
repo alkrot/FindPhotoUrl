@@ -80,14 +80,23 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FindFotoUrl\AuthForm.Designer.cs" />
-    <Compile Include="FindFotoUrl\FindUrl.cs">
+    <Compile Include="FindFotoUrl\FindUrlForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FindFotoUrl\FPhoto.cs">
+    <Compile Include="FindFotoUrl\FindUrlForm.Designer.cs">
+      <DependentUpon>FindUrlForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FindFotoUrl\FPhotoForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FindFotoUrl\Index.cs">
+    <Compile Include="FindFotoUrl\FPhotoForm.Designer.cs">
+      <DependentUpon>FPhotoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FindFotoUrl\MainForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FindFotoUrl\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FindFotoUrl\Photo.cs" />
     <Compile Include="FindFotoUrl\Program.cs" />
@@ -101,6 +110,9 @@
   <ItemGroup>
     <EmbeddedResource Include="FindFotoUrl\Autch.resx" />
     <EmbeddedResource Include="FindFotoUrl\FindUrl.resx" />
+    <EmbeddedResource Include="FindFotoUrl\FindUrlForm.resx">
+      <DependentUpon>FindUrlForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FindFotoUrl\Index.resx" />
   </ItemGroup>
   <ItemGroup>
