@@ -14,8 +14,6 @@ namespace FindFotoUrl
 
         public PictureBox pictureBox1;
 
-        public Label ltext;
-
         public LinkLabel url;
 
         protected override void Dispose(bool disposing)
@@ -30,52 +28,67 @@ namespace FindFotoUrl
 
         private void InitializeComponent()
         {
-            this.pictureBox1 = new PictureBox();
-            this.ltext = new Label();
-            this.url = new LinkLabel();
-            ((ISupportInitialize)this.pictureBox1).BeginInit();
-            base.SuspendLayout();
-            this.pictureBox1.BackColor = SystemColors.ActiveCaptionText;
-            this.pictureBox1.Dock = DockStyle.Fill;
-            this.pictureBox1.Location = new Point(0, 0);
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.url = new System.Windows.Forms.LinkLabel();
+            this.ltext = new System.Windows.Forms.RichTextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new Size(533, 356);
-            this.pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
+            this.pictureBox1.Size = new System.Drawing.Size(533, 356);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            this.ltext.BackColor = Color.White;
-            this.ltext.Cursor = Cursors.IBeam;
-            this.ltext.Dock = DockStyle.Bottom;
-            this.ltext.Location = new Point(0, 277);
-            this.ltext.Name = "ltext";
-            this.ltext.Size = new Size(533, 79);
-            this.ltext.TabIndex = 1;
-            this.url.Dock = DockStyle.Bottom;
-            this.url.Location = new Point(0, 258);
+            // 
+            // url
+            // 
+            this.url.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.url.Location = new System.Drawing.Point(0, 337);
             this.url.Name = "url";
-            this.url.Size = new Size(533, 19);
+            this.url.Size = new System.Drawing.Size(533, 19);
             this.url.TabIndex = 2;
-            this.url.LinkClicked += new LinkLabelLinkClickedEventHandler(this.url_LinkClicked);
-            base.AutoScaleDimensions = new SizeF(6f, 13f);
-            base.AutoScaleMode = AutoScaleMode.Font;
+            this.url.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.url_LinkClicked);
+            // 
+            // ltext
+            // 
+            this.ltext.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.ltext.Location = new System.Drawing.Point(0, 241);
+            this.ltext.Name = "ltext";
+            this.ltext.ReadOnly = true;
+            this.ltext.Size = new System.Drawing.Size(533, 96);
+            this.ltext.TabIndex = 3;
+            this.ltext.Text = "";
+            // 
+            // FPhotoForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            base.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            base.ClientSize = new Size(533, 356);
-            base.Controls.Add(this.url);
-            base.Controls.Add(this.ltext);
-            base.Controls.Add(this.pictureBox1);
-            base.FormBorderStyle = FormBorderStyle.FixedDialog;
-            base.MaximizeBox = false;
-            base.MinimizeBox = false;
-            base.Name = "FPhoto";
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(533, 356);
+            this.Controls.Add(this.ltext);
+            this.Controls.Add(this.url);
+            this.Controls.Add(this.pictureBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FPhotoForm";
             this.RightToLeftLayout = true;
-            base.StartPosition = FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Фотография";
-            base.TopMost = true;
-            base.FormClosed += new FormClosedEventHandler(this.FPhoto_FormClosed);
-            ((ISupportInitialize)this.pictureBox1).EndInit();
-            base.ResumeLayout(false);
-            base.PerformLayout();
+            this.TopMost = true;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FPhoto_FormClosed);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
+
+        public RichTextBox ltext;
     }
 }

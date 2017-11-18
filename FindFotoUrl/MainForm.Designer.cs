@@ -215,8 +215,8 @@ namespace FindFotoUrl
             Name = "Index";
             Text = "Поиск фото с сылками";
             TopMost = true;
-            FormClosed += Index_FormClosed;
-            Load += Form1_Load;
+            FormClosed += Main_FormClosed;
+            Load += MainForm_Load;
             _contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();

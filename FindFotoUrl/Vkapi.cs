@@ -9,7 +9,7 @@ namespace FindFotoUrl
 
 		public string Get(string methodName, string param)
 		{
-			WebRequest webRequest = WebRequest.Create(string.Concat(url, methodName, "?", param, "&access_token=", User.Default.Token, "&v=5.34"));
+			WebRequest webRequest = WebRequest.Create(string.Concat(url, methodName, "?", param,"&v=5.34","&access_token=", User.Default.Token));
 			WebResponse response = webRequest.GetResponse();
 			Stream responseStream = response.GetResponseStream();
 		    if (responseStream != null)

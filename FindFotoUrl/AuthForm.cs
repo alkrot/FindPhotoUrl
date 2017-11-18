@@ -27,7 +27,7 @@ namespace FindFotoUrl
 
 		private void Autch_Load(object sender, EventArgs e)
 		{
-			_webBrowser1.Navigate("https://oauth.vk.com/authorize?client_id=3809552&scope=photos,groups&redirect_uri=https://oauth.vk.com/blank.html&display=mobile&v=5.34&response_type=token");
+			_webBrowser1.Navigate("https://oauth.vk.com/authorize?client_id=3809552&scope=photos,groups,users,friends&redirect_uri=https://oauth.vk.com/blank.html&display=mobile&v=5.69&response_type=token");
 		}
 	}
 }

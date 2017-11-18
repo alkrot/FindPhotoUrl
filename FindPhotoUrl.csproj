@@ -113,6 +113,9 @@
     <EmbeddedResource Include="FindFotoUrl\FindUrlForm.resx">
       <DependentUpon>FindUrlForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FindFotoUrl\FPhotoForm.resx">
+      <DependentUpon>FPhotoForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FindFotoUrl\Index.resx" />
   </ItemGroup>
   <ItemGroup>

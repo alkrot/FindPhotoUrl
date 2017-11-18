@@ -20,7 +20,7 @@ namespace FindFotoUrl
 
 		private void url_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Process.Start("https://" + this.url.Text);
+			Process.Start("https://" + url.Text);
 		}
 	}
 }

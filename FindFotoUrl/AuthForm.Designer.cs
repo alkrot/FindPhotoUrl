@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace FindFotoUrl
 {
-    partial class AuthForm
+    public partial class AuthForm
     {
         private WebBrowser _webBrowser1;
 

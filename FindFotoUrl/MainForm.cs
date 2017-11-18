@@ -1,9 +1,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -37,7 +35,7 @@ namespace FindFotoUrl
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             AuthForm autch = new AuthForm();
             autch.ShowDialog();
@@ -68,16 +66,27 @@ namespace FindFotoUrl
         /// </summary>
         public void Start()
         {
+            Invoke((MethodInvoker)(() =>
+            {
+                Hide();
+            }));
             string text = _textBox1.Text;
             if (text.IndexOf("album", StringComparison.Ordinal) < 0)
             {
                 MessageBox.Show("Неправельная ссылка на альбом");
+                FormShow();
                 Th.Abort();
             }
             text = text.Substring(text.IndexOf("album", StringComparison.Ordinal)).Replace("album", "");
             string[] str = text.Split('_');
             Parsing(str);
             Print(Photos, listBox1);
+            FormShow();
+        }
+
+        private void FormShow()
+        {
+            Invoke((MethodInvoker)(() => { Show(); }));
         }
 
         /// <summary>
@@ -87,11 +96,20 @@ namespace FindFotoUrl
         public static void Parsing(string[] str)
         {
             JObject jObject = JObject.Parse(Vkapi.Get("photos.get", string.Concat("owner_id=", str[0], "&album_id=", str[1], "&count=1")));
-            if (jObject["error"] != null && jObject["error"]["error_code"].Value<int>() == 200)
+            if (jObject["error"] != null)
             {
-                MessageBox.Show("нет доступа к альбому");
+                switch (jObject["error"]["error_code"].Value<int>())
+                {
+                    case 100:
+                        MessageBox.Show("Один из пармметров не верен");
+                        break;
+                    case 200:
+                        MessageBox.Show("нет доступа к альбому");
+                        break;
+                }
                 Th.Abort();
             }
+
             count = jObject["response"]["count"].Value<int>();
             double num = Math.Ceiling(count / 1000.0); //вычесляем количество повторов вызова так макс фотополучение 1000 то делим коли на 1000 и округляем в большую сторону, чтобы выполнилось хотя бы один раз
             int num2 = 0;
@@ -130,10 +148,11 @@ namespace FindFotoUrl
                 {
                     if (int.Parse(jObject["response"]["items"][i]["comments"]["count"].ToString()) > 0)
                     {
-                        text = PhotosGetComments(jObject["response"]["items"][i]["owner_id"].ToString(), jObject["response"]["items"][i]["id"].ToString());
+                        List<Photo.Comment> comments;
+                        text = PhotosGetComments(jObject["response"]["items"][i]["owner_id"].ToString(), jObject["response"]["items"][i]["id"].ToString(), out comments);
                         if (text.Length > 0)
                         {
-                            ListAdd(jObject["response"]["items"][i], text);
+                            ListAdd(jObject["response"]["items"][i], text, comments);
                         }
                     }
                 }
@@ -146,10 +165,10 @@ namespace FindFotoUrl
         /// </summary>
         /// <param name="obj">json</param>
         /// <param name="result">ссылка в описание или комменте</param>
-        public static void ListAdd(object obj, string result)
+        public static void ListAdd(object obj, string result, List<Photo.Comment> comments = null)
         {
             JObject jObject = JObject.Parse(obj.ToString());
-            Photo item = new Photo(jObject["owner_id"].Value<int>(), jObject["id"].Value<int>(), jObject["photo_604"].ToString(), result);
+            Photo item = new Photo(jObject["owner_id"].Value<int>(), jObject["id"].Value<int>(), jObject["photo_604"].ToString(), result, comments);
             if (Photos.IndexOf(item) < 0)
             {
                 Photos.Add(item);
@@ -161,35 +180,47 @@ namespace FindFotoUrl
         /// </summary>
         /// <param name="ownerId">id владельца</param>
         /// <param name="photoId">id фото</param>
-        /// <returns></returns>
-        public static string PhotosGetComments(string ownerId, string photoId)
+        /// <returns>Комментарий с ссылкой</returns>
+        public static string PhotosGetComments(string ownerId, string photoId, out List<Photo.Comment> comments)
         {
             Thread.Sleep(500);
-            JObject jObject = JObject.Parse(Vkapi.Get("photos.getComments", string.Concat(new string[]
+            string param = string.Concat(new string[]
             {
                 "owner_id=",
                 ownerId,
                 "&photo_id=",
                 photoId,
-                "&count=100"
-            })));
-            int num = jObject["response"]["count"].Value<int>();
+                "&count=100",
+                "&extended=1",
+            });
 
+            JObject jObject = JObject.Parse(Vkapi.Get("photos.getComments", param));
+            int num = jObject["response"]["count"].Value<int>();
+            string lastComment = string.Empty;
+            var profile = jObject["response"]["profiles"];
+            var group = jObject["response"]["groups"];
+            comments = new List<Photo.Comment>();
             for (int i = 0; i < num; i++)
             {
-                string text = jObject["response"]["items"][i]["text"].ToString();
+                var comm = jObject["response"]["items"][i];
+                string text = comm["text"].ToString();
+                var user = profile.SelectToken("$.[?(@.id == " + comm["from_id"] + ")]") ?? group.SelectToken("$.[?(@.id == " + Math.Abs(comm["from_id"].Value<int>()) + ")]");
+                var comment = (user["first_name"] != null) ? new Photo.Comment(user["first_name"].ToString(), user["last_name"].ToString(), text)
+                    : new Photo.Comment(user["name"].ToString(), "", text);
                 if (text.IndexOf("vk.com", StringComparison.Ordinal) >= 0)
                 {
-                    return text;
+                    
+                    lastComment = text;
                 }
+                comments.Add(comment);
             }
-            return string.Empty;
+            return lastComment;
         }
 
         /// <summary>
         /// Вывод списка в контрол listbox
         /// </summary>
-        /// <param name="photos">Cgbcjr фото</param>
+        /// <param name="photos">Список фото</param>
         /// <param name="text">listbox</param>
         public void Print(List<Photo> photos, ListBox text)
         {
@@ -198,7 +229,7 @@ namespace FindFotoUrl
                 var photoLink = "vk.com/photo" + current.OwnerId + "_" + current.PhotoId;
                 if (text.Items.IndexOf(photoLink) < 0)
                 {
-                    ListText(photoLink+"\r");
+                    ListText(photoLink + "\r");
                 }
             }
         }
@@ -208,11 +239,11 @@ namespace FindFotoUrl
         /// </summary>
         public void OpenPhoto()
         {
-            if(listBox1.Items.Count > 0 && listBox1.SelectedIndex >= 0)
+            if (listBox1.Items.Count > 0 && listBox1.SelectedIndex >= 0)
                 Process.Start("http://" + listBox1.Items[listBox1.SelectedIndex]);
         }
 
-        private void Index_FormClosed(object sender, FormClosedEventArgs e)
+        private void Main_FormClosed(object sender, FormClosedEventArgs e)
         {
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Cookies);
             string[] files = Directory.GetFiles(folderPath);
@@ -267,7 +298,7 @@ namespace FindFotoUrl
                 }
                 int selectedIndex = listBox1.SelectedIndex;
                 Ph.pictureBox1.ImageLocation = Photos[selectedIndex].PhotoUrl;
-                Ph.ltext.Text = Photos[selectedIndex].Text;
+                Ph.ltext.Text = (Photos[selectedIndex].Comments != null) ? String.Join("\r\n", Photos[selectedIndex].Comments) : Photos[selectedIndex].Text;
                 Ph.Left = Left + Width + 10;
                 Ph.url.Text = Photos[selectedIndex].Url;
             }
@@ -294,6 +325,7 @@ namespace FindFotoUrl
                 if (WindowState == FormWindowState.Minimized)
                 {
                     WindowState = FormWindowState.Normal;
+                    Visible = true;
                 }
                 timer1.Enabled = false;
                 Th.Abort();
