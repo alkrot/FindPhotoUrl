@@ -1,11 +1,9 @@
 using System;
-using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace FindFotoUrl
 {
-	public partial class AuthForm : Form
+    public partial class AuthForm : Form
 	{
 		public AuthForm()
 		{

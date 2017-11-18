@@ -1,12 +1,9 @@
-using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace FindFotoUrl
 {
-	public partial class FPhotoForm : Form
+    public partial class FPhotoForm : Form
 	{
 		public FPhotoForm()
 		{
